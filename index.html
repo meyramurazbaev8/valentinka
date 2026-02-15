@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: #ffdde1; 
+            background-image: linear-gradient(to bottom right, #ff9a9e, #fad0c4);
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #d63384;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .gif-container img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+        }
+
+        #yesBtn {
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        #noBtn {
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Анимация сердечек */
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            animation: float 4s linear infinite;
+            opacity: 0;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="question-screen">
+            <div class="gif-container">
+                <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3R6bW14ZmJ4bnFxMGx4bnFxMGx4bnFxMGx4bnFxMGx4bnFxMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Cat">
+            </div>
+            <h1>Ты будешь моей валентинкой, Нурбану?</h1>
+            <p style="color: #666; font-size: 1.1rem;">Пожалуйста... 🥺</p>
+            
+            <div class="btn-group">
+                <button id="yesBtn" onclick="acceptLove()">Да!</button>
+                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">Нет</button>
+            </div>
+        </div>
+
+        <div id="success-screen" class="hidden">
+            <div class="gif-container">
+                <img src="https://spacecore.media/images/2026/02/15/2026-02-16-00.54.4973cbb0982ca177c9.jpg" alt="2026 02 16 00.54.49" border="0">
+            </div>
+            <h1>Ура! Я так и знал! ❤️</h1>
+            <p>Ты лучшая! Люблю тебя! 🥰</p>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionScreen = document.getElementById('question-screen');
+        const successScreen = document.getElementById('success-screen');
+
+        const noTexts = [
+            "Ты уверена?", 
+            "Подумай еще раз!", 
+            "Ну пожааалуйста!", 
+            "Я буду плакать...", 
+            "Разбиваешь сердце 💔", 
+            "Это не вариант!",
+            "Жми зеленую!"
+        ];
+        
+        let clickCount = 0;
+
+        // Логика кнопки "Нет"
+        function moveButton() {
+            clickCount++;
+            
+            // Увеличиваем кнопку "Да"
+            let currentSize = 1.2 + (clickCount * 0.5);
+            yesBtn.style.fontSize = `${currentSize}rem`;
+            yesBtn.style.padding = `${12 + clickCount * 5}px ${24 + clickCount * 10}px`;
+
+            // Меняем текст на кнопке "Нет"
+            if (clickCount < noTexts.length) {
+                noBtn.innerText = noTexts[clickCount];
+            } else {
+                noBtn.innerText = "Нет :(";
+            }
+
+            // Двигаем кнопку "Нет" в случайное место (для ПК)
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            // На мобильных лучше просто менять текст и увеличивать "Да", 
+            // иначе кнопка улетит за экран. Но немного подвинем:
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${Math.random() * 80}%`;
+            noBtn.style.top = `${Math.random() * 80}%`;
+        }
+
+        // Логика кнопки "Да"
+        function acceptLove() {
+            questionScreen.classList.add('hidden');
+            successScreen.classList.remove('hidden');
+            createHearts();
+        }
+
+        // Салют из сердечек
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+                document.body.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
